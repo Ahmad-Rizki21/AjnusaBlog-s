@@ -4,7 +4,6 @@ FROM node:20-slim AS base
 # Install OpenSSL and other dependencies
 RUN apt-get update && apt-get install -y \
     openssl \
-    libssl1.1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies only when needed
