@@ -52,10 +52,15 @@ Website lengkap dengan blog system untuk AJNUSA. Dibangun dengan teknologi moder
 
 ## Prerequisites
 
+### Local Development
 - **Node.js** 20+
 - **npm** atau package manager lain
 - **MySQL** database
 - **Git**
+
+### Docker Development
+- **Docker Desktop** (Mac/Windows) atau Docker Engine (Linux)
+- **Docker Compose**
 
 ## Installation
 
@@ -131,6 +136,85 @@ src/
 
 prisma/
 └── schema.prisma     # Database schema
+```
+
+## Docker Deployment
+
+### Using Docker Compose (Recommended)
+
+Cara termudah untuk menjalankan aplikasi dengan database MySQL:
+
+```bash
+# Clone repository
+git clone https://github.com/Ahmad-Rizki21/AjnusaBlog-s.git
+cd AjnusaBlog-s
+
+# Buat file .env untuk NEXTAUTH_SECRET
+echo "NEXTAUTH_SECRET=your-secure-random-secret-key" > .env
+
+# Jalankan dengan Docker Compose
+docker-compose up -d
+
+# Cek logs
+docker-compose logs -f app
+```
+
+Aplikasi akan berjalan di http://localhost:3000
+
+### Build Docker Image Manual
+
+```bash
+# Build image
+docker build -t ajnusa-blog .
+
+# Run container (pastikan MySQL sudah running)
+docker run -p 3000:3000 \
+  -e DATABASE_URL="mysql://user:password@host:3306/ajnusa_db" \
+  -e NEXTAUTH_URL="http://localhost:3000" \
+  -e NEXTAUTH_SECRET="your-secret-key" \
+  ajnusa-blog
+```
+
+### Docker Commands
+
+| Command | Description |
+|---------|-------------|
+| `docker-compose up -d` | Start semua services di background |
+| `docker-compose down` | Stop semua services |
+| `docker-compose logs -f` | Lihat logs real-time |
+| `docker-compose exec app sh` | Masuk ke container shell |
+| `docker-compose restart` | Restart services |
+
+## CI/CD with GitHub Actions
+
+Project ini sudah dilengkapi dengan GitHub Actions workflow untuk automated build dan security scanning.
+
+### Workflow Features
+
+- **Lint & Type Check** - Validasi code quality
+- **Docker Build & Push** - Automated build ke GitHub Container Registry
+- **Security Scan** - Trivy vulnerability scanner
+- **Deploy Notification** - Notifikasi deploy ke production
+
+### Container Registry
+
+Docker image dipublish ke:
+```
+ghcr.io/ahmad-rizki21/ajnusa-blog:latest
+```
+
+### Pull Docker Image
+
+```bash
+# Pull image dari registry
+docker pull ghcr.io/ahmad-rizki21/ajnusa-blog:latest
+
+# Run image
+docker run -p 3000:3000 \
+  -e DATABASE_URL="mysql://..." \
+  -e NEXTAUTH_URL="http://your-domain.com" \
+  -e NEXTAUTH_SECRET="your-secret" \
+  ghcr.io/ahmad-rizki21/ajnusa-blog:latest
 ```
 
 ## Branches
