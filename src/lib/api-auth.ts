@@ -3,11 +3,19 @@ import { prisma } from '@/lib/prisma';
 import { AdminRole } from '@prisma/client';
 import { Permission } from '@/lib/permissions';
 
+interface AdminUser {
+  id: string;
+  username: string;
+  name: string;
+  email: string;
+  role: AdminRole;
+}
+
 /**
  * Verify admin session from Authorization header
  * Returns the admin user if valid, null otherwise
  */
-export async function verifyAdminSession(request: NextRequest) {
+export async function verifyAdminSession(request: NextRequest): Promise<AdminUser | null> {
   const authHeader = request.headers.get('authorization');
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -29,14 +37,14 @@ export async function verifyAdminSession(request: NextRequest) {
     },
   });
 
-  return admin;
+  return admin as AdminUser | null;
 }
 
 /**
  * Check if admin has required permission
  * Returns 403 response if not authorized
  */
-export function requirePermission(admin: any, permission: Permission): NextResponse | null {
+export function requirePermission(admin: AdminUser | null, permission: Permission): NextResponse | null {
   if (!admin) {
     return NextResponse.json(
       { error: 'Unauthorized - Please login' },

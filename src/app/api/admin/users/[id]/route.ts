@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 type Params = Promise<{ id: string }>;
@@ -94,7 +95,7 @@ export async function PUT(
     }
 
     // Prepare update data
-    const updateData: any = {};
+    const updateData: Prisma.AdminUpdateInput = {};
     if (username) updateData.username = username;
     if (name) updateData.name = name;
     if (email) updateData.email = email;

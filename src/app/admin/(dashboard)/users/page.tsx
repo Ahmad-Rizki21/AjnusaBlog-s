@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plus, Search, UserCog, Mail, Shield, Calendar, Edit, Trash2, Crown, Eye, PenTool } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { Plus, Search, UserCog, Mail, Calendar, Edit, Trash2, Crown, Eye, PenTool } from 'lucide-react';
 
 interface AdminUser {
   id: string;
@@ -33,7 +34,7 @@ export default function UsersPage() {
   const roles = ['SEMUA', 'ADMIN', 'EDITOR', 'READ_ONLY'];
 
   const getRoleConfig = (role: string) => {
-    const configs: { [key: string]: { color: string; icon: any; label: string; description: string } } = {
+    const configs: { [key: string]: { color: string; icon: LucideIcon; label: string; description: string } } = {
       'ADMIN': {
         color: 'from-red-500 to-red-700',
         icon: Crown,
@@ -431,7 +432,7 @@ export default function UsersPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                 <select
                   value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value as 'ADMIN' | 'EDITOR' | 'READ_ONLY' })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 >
                   <option value="READ_ONLY">Read Only - Hanya lihat</option>
