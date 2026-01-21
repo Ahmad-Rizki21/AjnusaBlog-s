@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -24,17 +24,24 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [admin, setAdmin] = useState<AdminData | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [admin, setAdmin] = useState<AdminData | null>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const session = localStorage.getItem('adminSession');
+      return session ? JSON.parse(session) : null;
+    } catch {
+      return null;
+    }
+  });
+  const hasCheckedAuth = useRef(false);
 
   useEffect(() => {
-    // Check if admin is logged in
+    if (hasCheckedAuth.current) return;
+    hasCheckedAuth.current = true;
+
     const session = localStorage.getItem('adminSession');
     if (!session) {
       router.push('/admin/login');
-    } else {
-      setAdmin(JSON.parse(session));
-      setIsAuthenticated(true);
     }
   }, [router]);
 
@@ -43,8 +50,8 @@ export default function AdminLayout({
     router.push('/admin/login');
   };
 
-  if (!isAuthenticated) {
-    return null; // or loading spinner
+  if (!admin) {
+    return null;
   }
 
   const navItems = [
