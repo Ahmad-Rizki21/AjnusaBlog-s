@@ -7,7 +7,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BlogCard from '@/components/blog/BlogCard';
 import { COMPANY_INFO } from '@/data/constants';
-import { Calendar, User, ArrowLeft, Share2, Clock, Eye, ChevronRight } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Share2, Clock, Eye, ChevronRight, Megaphone } from 'lucide-react';
 
 interface BlogPost {
   id: string;
@@ -338,6 +338,25 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                       </Link>
                     </div>
                   )}
+
+                  {/* Promosi Section */}
+                  <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-2xl p-6 text-white shadow-lg">
+                    <div className="flex items-center gap-3 mb-3">
+                      <Megaphone className="w-6 h-6" />
+                      <h3 className="text-lg font-bold">
+                        Promosi Menarik
+                      </h3>
+                    </div>
+                    <p className="text-white/90 text-sm mb-4">
+                      Dapatkan penawaran terbaik untuk solusi internet dan IT bisnis Anda.
+                    </p>
+                    <Link
+                      href="/promosi"
+                      className="block w-full text-center px-6 py-3 bg-white text-purple-700 font-bold rounded-lg hover:bg-gray-50 transition-all duration-300 shadow-md"
+                    >
+                      Lihat Semua Promo →
+                    </Link>
+                  </div>
 
                   {/* Newsletter Subscription */}
                   <div className="bg-white dark:bg-gray-950 rounded-2xl p-6 shadow-lg border-2 border-red-100 dark:border-red-900/30">

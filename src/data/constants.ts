@@ -7,6 +7,7 @@ export const NAV_LINKS = [
   { label: 'Solusi', href: '/#solutions' },
   { label: 'Klien', href: '/#clients' },
   { label: 'Blog', href: '/blog' },
+  { label: 'Promosi', href: '/promosi' },
   { label: 'Hubungi Kami', href: '/#contact' },
 ] as const;
 

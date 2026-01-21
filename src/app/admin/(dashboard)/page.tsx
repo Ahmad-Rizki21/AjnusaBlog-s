@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FileText, Eye, Plus } from 'lucide-react';
+import { FileText, Eye, Plus, Megaphone, ToggleLeft, ToggleRight } from 'lucide-react';
 import { checkCurrentUserPermission, Permission } from '@/lib/permissions';
+import { api } from '@/lib/api-fetch';
 
 interface BlogPost {
   id: string;
@@ -15,24 +16,41 @@ interface BlogPost {
   createdAt: string;
 }
 
+interface Popup {
+  id: string;
+  title: string;
+  type: 'IMAGE' | 'HTML';
+  isActive: boolean;
+  createdAt: string;
+}
+
 export default function AdminDashboard() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [popups, setPopups] = useState<Popup[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Check permissions
-  const canCreate = checkCurrentUserPermission(Permission.CREATE_BLOG);
+  const canCreateBlog = checkCurrentUserPermission(Permission.CREATE_BLOG);
+  const canEditPopup = checkCurrentUserPermission(Permission.EDIT_BLOG);
 
   useEffect(() => {
-    fetchPosts();
+    fetchData();
   }, []);
 
-  const fetchPosts = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch('/api/blog');
-      const data = await response.json();
-      setPosts(data);
+      const [postsRes, popupsRes] = await Promise.all([
+        fetch('/api/blog'),
+        api.get('/api/admin/popups'),
+      ]);
+      const [postsData, popupsData] = await Promise.all([
+        postsRes.json(),
+        popupsRes.json(),
+      ]);
+      setPosts(postsData);
+      setPopups(popupsData);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
@@ -47,10 +65,24 @@ export default function AdminDashboard() {
       });
 
       if (response.ok) {
-        fetchPosts(); // Refresh list
+        fetchData(); // Refresh list
       }
     } catch (error) {
       console.error('Error deleting post:', error);
+    }
+  };
+
+  const handleTogglePopup = async (id: string, currentStatus: boolean) => {
+    try {
+      const response = await api.put(`/api/admin/popups/${id}`, {
+        isActive: !currentStatus,
+      });
+
+      if (response.ok) {
+        fetchData(); // Refresh list
+      }
+    } catch (error) {
+      console.error('Error toggling popup:', error);
     }
   };
 
@@ -66,6 +98,12 @@ export default function AdminDashboard() {
     total: posts.length,
     published: posts.filter((p) => p.published).length,
     draft: posts.filter((p) => !p.published).length,
+  };
+
+  const popupStats = {
+    total: popups.length,
+    active: popups.filter((p) => p.isActive).length,
+    inactive: popups.filter((p) => !p.isActive).length,
   };
 
   return (
@@ -109,11 +147,50 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      {/* Popup Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Total Popup</p>
+              <p className="text-3xl font-bold text-gray-900 mt-2">{popupStats.total}</p>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <Megaphone className="w-6 h-6 text-purple-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Popup Aktif</p>
+              <p className="text-3xl font-bold text-green-600 mt-2">{popupStats.active}</p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <ToggleRight className="w-6 h-6 text-green-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Popup Non-Aktif</p>
+              <p className="text-3xl font-bold text-gray-400 mt-2">{popupStats.inactive}</p>
+            </div>
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+              <ToggleLeft className="w-6 h-6 text-gray-400" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Blog Posts */}
       <div className="bg-white rounded-xl shadow-sm">
         <div className="p-6 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900">Artikel Terbaru</h2>
-          {canCreate && (
+          {canCreateBlog && (
             <Link
               href="/admin/blog/new"
               className="flex items-center space-x-2 px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition"
@@ -129,9 +206,9 @@ export default function AdminDashboard() {
             <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Belum ada artikel</h3>
             <p className="text-gray-600 mb-6">
-              {canCreate ? 'Mulai dengan membuat artikel pertama Anda' : 'Belum ada artikel yang tersedia'}
+              {canCreateBlog ? 'Mulai dengan membuat artikel pertama Anda' : 'Belum ada artikel yang tersedia'}
             </p>
-            {canCreate && (
+            {canCreateBlog && (
               <Link
                 href="/admin/blog/new"
                 className="inline-flex items-center space-x-2 px-6 py-3 bg-red-700 text-white rounded-lg hover:bg-red-800 transition"
@@ -208,6 +285,129 @@ export default function AdminDashboard() {
               className="text-red-700 hover:text-red-800 font-medium transition"
             >
               Lihat Semua Artikel →
+            </Link>
+          </div>
+        )}
+      </div>
+
+      {/* Popups */}
+      <div className="bg-white rounded-xl shadow-sm">
+        <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-gray-900">Popup Iklan</h2>
+          {canEditPopup && (
+            <Link
+              href="/admin/popups"
+              className="flex items-center space-x-2 px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition"
+            >
+              <Plus size={18} />
+              <span>Tambah Popup</span>
+            </Link>
+          )}
+        </div>
+
+        {popups.length === 0 ? (
+          <div className="p-12 text-center">
+            <Megaphone className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Belum ada popup</h3>
+            <p className="text-gray-600 mb-6">
+              {canEditPopup ? 'Mulai dengan membuat popup pertama Anda' : 'Belum ada popup yang tersedia'}
+            </p>
+            {canEditPopup && (
+              <Link
+                href="/admin/popups"
+                className="inline-flex items-center space-x-2 px-6 py-3 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition"
+              >
+                <Plus size={18} />
+                <span>Buat Popup Pertama</span>
+              </Link>
+            )}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Judul
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Tipe
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Tanggal
+                  </th>
+                  {canEditPopup && (
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Aksi
+                    </th>
+                  )}
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {popups.slice(0, 5).map((popup) => (
+                  <tr key={popup.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-medium text-gray-900">{popup.title}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                        popup.type === 'IMAGE'
+                          ? 'bg-blue-100 text-blue-800'
+                          : 'bg-purple-100 text-purple-800'
+                      }`}>
+                        {popup.type === 'IMAGE' ? 'Gambar' : 'HTML'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                          popup.isActive
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}
+                      >
+                        {popup.isActive ? 'Aktif' : 'Non-Aktif'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {new Date(popup.createdAt).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </td>
+                    {canEditPopup && (
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() => handleTogglePopup(popup.id, popup.isActive)}
+                          className={`p-2 rounded-lg transition-all ${
+                            popup.isActive
+                              ? 'bg-green-50 text-green-700 hover:bg-green-100'
+                              : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                          }`}
+                          title={popup.isActive ? 'Non-aktifkan' : 'Aktifkan'}
+                        >
+                          {popup.isActive ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {popups.length > 5 && (
+          <div className="p-4 border-t border-gray-200 text-center">
+            <Link
+              href="/admin/popups"
+              className="text-purple-700 hover:text-purple-800 font-medium transition"
+            >
+              Lihat Semua Popup →
             </Link>
           </div>
         )}

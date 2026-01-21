@@ -52,6 +52,35 @@ model Admin {
 
   // Relations
   blogPosts BlogPost[]
+  popups    Popup[]
 
   @@map("Admin")
+}
+
+// Model untuk Popup Iklan
+model Popup {
+  id          String   @id @default(uuid())
+  title       String
+  type        PopupType @default(IMAGE)  // IMAGE or HTML
+  content     String   @db.Text  // URL gambar atau HTML content
+  link        String?  @db.LongText  // Link tujuan saat popup diklik
+  isActive    Boolean  @default(false)
+  delay       Int      @default(0)  // Delay dalam detik
+  showClose   Boolean  @default(true)  // Tampilkan tombol close
+  width       Int?     // Lebar popup (px)
+  height      Int?     // Tinggi popup (px)
+  createdBy   String   // ID admin yang buat
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  creator     Admin    @relation(fields: [createdBy], references: [id], onDelete:Cascade)
+
+  @@map("Popup")
+}
+
+// Enum untuk Tipe Popup
+enum PopupType {
+  IMAGE  // Popup berupa gambar
+  HTML   // Popup berupa HTML content
 }

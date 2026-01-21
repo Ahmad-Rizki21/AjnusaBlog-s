@@ -12,6 +12,7 @@ import {
   Building2,
   Users,
   Shield,
+  Megaphone,
 } from 'lucide-react';
 
 import { AdminRole, Permission, hasPermission } from '@/lib/permissions';
@@ -67,6 +68,7 @@ export default function AdminLayout({
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, permission: Permission.VIEW_DASHBOARD },
     { href: '/admin/blog', label: 'Artikel Blog', icon: FileText, permission: Permission.VIEW_BLOG },
     { href: '/admin/users', label: 'Manajemen User', icon: Users, permission: Permission.VIEW_USERS },
+    { href: '/admin/popups', label: 'Popup Iklan', icon: Megaphone, permission: Permission.EDIT_BLOG },
   ].filter(item => admin && hasPermission(admin.role, item.permission));
 
   return (
