@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `blogpost` MODIFY `image` LONGTEXT NULL;
+ALTER TABLE `BlogPost` MODIFY `image` LONGTEXT NULL;
