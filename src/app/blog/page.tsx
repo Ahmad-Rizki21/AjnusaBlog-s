@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
+import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BlogCard from '@/components/blog/BlogCard';
@@ -197,12 +198,12 @@ export default function BlogPage() {
                 Konsultasikan kebutuhan internet dan IT Anda dengan tim ahli kami.
                 Kami siap membantu menemukan solusi terbaik untuk bisnis Anda.
               </p>
-              <a
+              <Link
                 href="/#contact"
                 className="inline-flex items-center space-x-2 px-8 py-4 bg-white text-red-700 font-bold rounded-full hover:bg-gray-50 transition-all duration-300 shadow-lg"
               >
                 <span>Hubungi Kami</span>
-              </a>
+              </Link>
             </div>
           </div>
         </section>

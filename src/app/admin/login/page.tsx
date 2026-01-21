@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Building2 } from 'lucide-react';
 
 export default function AdminLoginPage() {
@@ -108,9 +109,9 @@ export default function AdminLoginPage() {
         </form>
 
         <div className="mt-6 text-center">
-          <a href="/" className="text-sm text-gray-600 hover:text-red-700 transition">
+          <Link href="/" className="text-sm text-gray-600 hover:text-red-700 transition">
             ← Kembali ke Website
-          </a>
+          </Link>
         </div>
       </div>
     </div>

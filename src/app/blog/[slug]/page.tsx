@@ -207,12 +207,12 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
               <p className="text-white/90 text-lg mb-6 max-w-2xl mx-auto">
                 Konsultasikan kebutuhan internet dan IT Anda dengan tim ahli kami.
               </p>
-              <a
+              <Link
                 href="/#contact"
                 className="inline-flex items-center space-x-2 px-8 py-4 bg-white text-red-700 font-bold rounded-full hover:bg-gray-50 transition-all duration-300 shadow-lg"
               >
                 <span>Hubungi Kami</span>
-              </a>
+              </Link>
             </div>
           </div>
         </section>

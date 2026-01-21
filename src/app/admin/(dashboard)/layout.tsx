@@ -12,6 +12,11 @@ import {
   Building2,
 } from 'lucide-react';
 
+interface AdminData {
+  name: string;
+  email: string;
+}
+
 export default function AdminLayout({
   children,
 }: {
@@ -19,7 +24,8 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [admin, setAdmin] = useState<any>(null);
+  const [admin, setAdmin] = useState<AdminData | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // Check if admin is logged in
@@ -28,6 +34,7 @@ export default function AdminLayout({
       router.push('/admin/login');
     } else {
       setAdmin(JSON.parse(session));
+      setIsAuthenticated(true);
     }
   }, [router]);
 
@@ -36,7 +43,7 @@ export default function AdminLayout({
     router.push('/admin/login');
   };
 
-  if (!admin) {
+  if (!isAuthenticated) {
     return null; // or loading spinner
   }
 
