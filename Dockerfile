@@ -1,8 +1,11 @@
-# Base image
-FROM node:20-alpine AS base
+# Base image - use Debian instead of Alpine for better Prisma compatibility
+FROM node:20-slim AS base
 
-# Install OpenSSL for Prisma
-RUN apk add --no-cache libc6-compat openssl1.1-compat
+# Install OpenSSL and other dependencies
+RUN apt-get update && apt-get install -y \
+    openssl \
+    libssl1.1 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -31,7 +34,7 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -52,7 +55,7 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]
