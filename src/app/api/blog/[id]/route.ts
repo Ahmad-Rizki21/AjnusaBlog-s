@@ -4,11 +4,12 @@ import { prisma } from '@/lib/prisma';
 // GET single blog post
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const post = await prisma.blogPost.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!post) {
@@ -31,15 +32,16 @@ export async function GET(
 // PUT update blog post
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { title, slug, excerpt, content, image, category, author, published } = body;
 
     // Check if post exists
     const existingPost = await prisma.blogPost.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingPost) {
@@ -64,7 +66,7 @@ export async function PUT(
     }
 
     const post = await prisma.blogPost.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         slug,
@@ -90,12 +92,13 @@ export async function PUT(
 // DELETE blog post
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Check if post exists
     const existingPost = await prisma.blogPost.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingPost) {
@@ -106,7 +109,7 @@ export async function DELETE(
     }
 
     await prisma.blogPost.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Artikel berhasil dihapus' });
