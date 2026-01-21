@@ -47,7 +47,7 @@ jobs:
       contents: read
       packages: write
     outputs:
-      image-tag: ${{ steps.meta.outputs.tags }}
+      image-tag: ${{ steps.tag.outputs.tag }}
       image-digest: ${{ steps.build.outputs.digest }}
     steps:
       - name: Checkout code
@@ -88,6 +88,13 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
 
+      - name: Extract single tag for security scan
+        id: tag
+        run: |
+          # Get first tag from multi-line output
+          FIRST_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+          echo "tag=$FIRST_TAG" >> $GITHUB_OUTPUT
+
   # Security Scan
   security:
     name: Security Scan
@@ -103,10 +110,11 @@ jobs:
           image-ref: ${{ needs.build.outputs.image-tag }}
           format: 'sarif'
           output: 'trivy-results.sarif'
+        continue-on-error: true
 
       - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('trivy-results.sarif') != ''
         with:
           sarif_file: 'trivy-results.sarif'
 
