@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Eye, Edit, Trash2, Plus, Search, Calendar, User, FileText as FileTextIcon, Sparkles } from 'lucide-react';
+import { api } from '@/lib/api-fetch';
+import { getCurrentAdmin, Permission, checkCurrentUserPermission } from '@/lib/permissions';
 
 interface BlogPost {
   id: string;
@@ -21,6 +23,11 @@ export default function AdminBlogPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('Semua');
   const [loading, setLoading] = useState(true);
+
+  // Check permissions
+  const canCreate = checkCurrentUserPermission(Permission.CREATE_BLOG);
+  const canEdit = checkCurrentUserPermission(Permission.EDIT_BLOG);
+  const canDelete = checkCurrentUserPermission(Permission.DELETE_BLOG);
 
   const categories = ['Semua', 'Teknologi', 'Business', 'Industri', 'Case Study', 'Tips'];
 
@@ -59,7 +66,7 @@ export default function AdminBlogPage() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/api/blog');
+      const response = await api.get('/api/blog');
       const data = await response.json();
       setPosts(data);
       setFilteredPosts(data);
@@ -74,12 +81,13 @@ export default function AdminBlogPage() {
     if (!confirm('Apakah Anda yakin ingin menghapus artikel ini?')) return;
 
     try {
-      const response = await fetch(`/api/blog/${id}`, {
-        method: 'DELETE',
-      });
+      const response = await api.delete(`/api/blog/${id}`);
 
       if (response.ok) {
         fetchPosts();
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Gagal menghapus artikel');
       }
     } catch (error) {
       console.error('Error deleting post:', error);
@@ -120,13 +128,15 @@ export default function AdminBlogPage() {
               </div>
             </div>
           </div>
-          <Link
-            href="/admin/blog/new"
-            className="group relative inline-flex items-center space-x-2 px-8 py-4 bg-white text-red-700 rounded-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 font-semibold"
-          >
-            <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
-            <span>Tambah Artikel</span>
-          </Link>
+          {canCreate && (
+            <Link
+              href="/admin/blog/new"
+              className="group relative inline-flex items-center space-x-2 px-8 py-4 bg-white text-red-700 rounded-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 font-semibold"
+            >
+              <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
+              <span>Tambah Artikel</span>
+            </Link>
+          )}
         </div>
       </div>
 
@@ -177,7 +187,7 @@ export default function AdminBlogPage() {
                 ? 'Coba cari dengan kata kunci atau kategori lain'
                 : 'Mulai dengan membuat artikel pertama Anda'}
             </p>
-            {!searchTerm && categoryFilter === 'Semua' && (
+            {!searchTerm && categoryFilter === 'Semua' && canCreate && (
               <Link
                 href="/admin/blog/new"
                 className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 font-semibold"
@@ -249,7 +259,7 @@ export default function AdminBlogPage() {
                 {/* Action Buttons */}
                 <div className="flex items-center gap-2 pt-4">
                   <Link
-                    href={`/blog/${post.id}`}
+                    href={`/blog/${post.slug}`}
                     target="_blank"
                     className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-all font-medium group/btn"
                     title="Lihat"
@@ -257,21 +267,25 @@ export default function AdminBlogPage() {
                     <Eye size={16} className="group-hover/btn:scale-110 transition-transform" />
                     <span>Lihat</span>
                   </Link>
-                  <Link
-                    href={`/admin/blog/${post.id}/edit`}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 transition-all font-medium group/btn"
-                    title="Edit"
-                  >
-                    <Edit size={16} className="group-hover/btn:scale-110 transition-transform" />
-                    <span>Edit</span>
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(post.id)}
-                    className="p-2.5 bg-red-50 text-red-700 rounded-xl hover:bg-red-100 transition-all group/btn"
-                    title="Hapus"
-                  >
-                    <Trash2 size={16} className="group-hover/btn:scale-110 transition-transform" />
-                  </button>
+                  {canEdit && (
+                    <Link
+                      href={`/admin/blog/${post.id}/edit`}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 transition-all font-medium group/btn"
+                      title="Edit"
+                    >
+                      <Edit size={16} className="group-hover/btn:scale-110 transition-transform" />
+                      <span>Edit</span>
+                    </Link>
+                  )}
+                  {canDelete && (
+                    <button
+                      onClick={() => handleDelete(post.id)}
+                      className="p-2.5 bg-red-50 text-red-700 rounded-xl hover:bg-red-100 transition-all group/btn"
+                      title="Hapus"
+                    >
+                      <Trash2 size={16} className="group-hover/btn:scale-110 transition-transform" />
+                    </button>
+                  )}
                 </div>
               </div>
 

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FileText, Eye, Edit, Trash2, Plus } from 'lucide-react';
+import { FileText, Eye, Plus } from 'lucide-react';
+import { checkCurrentUserPermission, Permission } from '@/lib/permissions';
 
 interface BlogPost {
   id: string;
@@ -17,6 +18,9 @@ interface BlogPost {
 export default function AdminDashboard() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Check permissions
+  const canCreate = checkCurrentUserPermission(Permission.CREATE_BLOG);
 
   useEffect(() => {
     fetchPosts();
@@ -109,27 +113,33 @@ export default function AdminDashboard() {
       <div className="bg-white rounded-xl shadow-sm">
         <div className="p-6 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900">Artikel Terbaru</h2>
-          <Link
-            href="/admin/blog/new"
-            className="flex items-center space-x-2 px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition"
-          >
-            <Plus size={18} />
-            <span>Tambah Artikel</span>
-          </Link>
+          {canCreate && (
+            <Link
+              href="/admin/blog/new"
+              className="flex items-center space-x-2 px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition"
+            >
+              <Plus size={18} />
+              <span>Tambah Artikel</span>
+            </Link>
+          )}
         </div>
 
         {posts.length === 0 ? (
           <div className="p-12 text-center">
             <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Belum ada artikel</h3>
-            <p className="text-gray-600 mb-6">Mulai dengan membuat artikel pertama Anda</p>
-            <Link
-              href="/admin/blog/new"
-              className="inline-flex items-center space-x-2 px-6 py-3 bg-red-700 text-white rounded-lg hover:bg-red-800 transition"
-            >
-              <Plus size={18} />
-              <span>Buat Artikel Pertama</span>
-            </Link>
+            <p className="text-gray-600 mb-6">
+              {canCreate ? 'Mulai dengan membuat artikel pertama Anda' : 'Belum ada artikel yang tersedia'}
+            </p>
+            {canCreate && (
+              <Link
+                href="/admin/blog/new"
+                className="inline-flex items-center space-x-2 px-6 py-3 bg-red-700 text-white rounded-lg hover:bg-red-800 transition"
+              >
+                <Plus size={18} />
+                <span>Buat Artikel Pertama</span>
+              </Link>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -150,9 +160,6 @@ export default function AdminDashboard() {
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Tanggal
-                  </th>
-                  <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Aksi
                   </th>
                 </tr>
               </thead>
@@ -186,32 +193,6 @@ export default function AdminDashboard() {
                         month: 'short',
                         year: 'numeric',
                       })}
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm font-medium">
-                      <div className="flex items-center justify-end space-x-2">
-                        <Link
-                          href={`/blog/${post.id}`}
-                          target="_blank"
-                          className="p-2 text-gray-400 hover:text-blue-600 transition"
-                          title="Lihat"
-                        >
-                          <Eye size={18} />
-                        </Link>
-                        <Link
-                          href={`/admin/blog/${post.id}/edit`}
-                          className="p-2 text-gray-400 hover:text-green-600 transition"
-                          title="Edit"
-                        >
-                          <Edit size={18} />
-                        </Link>
-                        <button
-                          onClick={() => handleDelete(post.id)}
-                          className="p-2 text-gray-400 hover:text-red-600 transition"
-                          title="Hapus"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
                     </td>
                   </tr>
                 ))}

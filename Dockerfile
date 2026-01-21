@@ -47,12 +47,22 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 
-# Copy Prisma migrations
-COPY --from=builder /app/prisma ./prisma
+# Copy scripts folder
+COPY --from=builder /app/scripts ./scripts
 
-# Copy entrypoint script
-COPY docker-entrypoint.sh /app/
-RUN chmod +x /app/docker-entrypoint.sh
+# Create entrypoint script directly in container
+RUN echo '#!/bin/bash' > /app/entrypoint.sh && \
+    echo 'set -e' >> /app/entrypoint.sh && \
+    echo '' >> /app/entrypoint.sh && \
+    echo 'echo "Running Prisma migrations..."' >> /app/entrypoint.sh && \
+    echo 'npx prisma migrate deploy' >> /app/entrypoint.sh && \
+    echo '' >> /app/entrypoint.sh && \
+    echo 'echo "Running Prisma seed..."' >> /app/entrypoint.sh && \
+    echo 'npx prisma db seed || echo "Seed completed with warnings"' >> /app/entrypoint.sh && \
+    echo '' >> /app/entrypoint.sh && \
+    echo 'echo "Starting application..."' >> /app/entrypoint.sh && \
+    echo 'exec node server.js' >> /app/entrypoint.sh && \
+    chmod +x /app/entrypoint.sh
 
 RUN chown -R nextjs:nodejs /app
 
@@ -63,4 +73,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]

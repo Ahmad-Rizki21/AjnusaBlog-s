@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -10,11 +10,18 @@ import {
   Menu,
   X,
   Building2,
+  Users,
+  Shield,
 } from 'lucide-react';
 
+import { AdminRole, Permission, hasPermission } from '@/lib/permissions';
+
 interface AdminData {
+  id: string;
   name: string;
   email: string;
+  role: AdminRole;
+  username: string;
 }
 
 export default function AdminLayout({
@@ -24,23 +31,15 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [admin, setAdmin] = useState<AdminData | null>(() => {
-    if (typeof window === 'undefined') return null;
-    try {
-      const session = localStorage.getItem('adminSession');
-      return session ? JSON.parse(session) : null;
-    } catch {
-      return null;
-    }
-  });
-  const hasCheckedAuth = useRef(false);
+  const [admin, setAdmin] = useState<AdminData | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (hasCheckedAuth.current) return;
-    hasCheckedAuth.current = true;
-
+    setIsMounted(true);
     const session = localStorage.getItem('adminSession');
-    if (!session) {
+    if (session) {
+      setAdmin(JSON.parse(session));
+    } else {
       router.push('/admin/login');
     }
   }, [router]);
@@ -50,14 +49,20 @@ export default function AdminLayout({
     router.push('/admin/login');
   };
 
-  if (!admin) {
-    return null;
+  // Show nothing during SSR/first render to prevent hydration mismatch
+  if (!isMounted || !admin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-700"></div>
+      </div>
+    );
   }
 
   const navItems = [
-    { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/admin/blog', label: 'Artikel Blog', icon: FileText },
-  ];
+    { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, permission: Permission.VIEW_DASHBOARD },
+    { href: '/admin/blog', label: 'Artikel Blog', icon: FileText, permission: Permission.VIEW_BLOG },
+    { href: '/admin/users', label: 'Manajemen User', icon: Users, permission: Permission.VIEW_USERS },
+  ].filter(item => admin && hasPermission(admin.role, item.permission));
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -112,6 +117,10 @@ export default function AdminLayout({
             <p className="text-sm text-gray-400">Logged in as:</p>
             <p className="font-medium text-white">{admin.name}</p>
             <p className="text-xs text-gray-500">{admin.email}</p>
+            <div className="mt-2 flex items-center gap-2">
+              <Shield size={12} className="text-red-400" />
+              <span className="text-xs text-red-400 font-medium">{admin.role}</span>
+            </div>
           </div>
           <button
             onClick={handleLogout}

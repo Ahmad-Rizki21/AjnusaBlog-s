@@ -23,15 +23,35 @@ model BlogPost {
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // Relations
+  authorId    String?
+  authorUser  Admin?   @relation(fields: [authorId], references: [id], onDelete:Cascade)
+
+  @@map("BlogPost")
+}
+
+// Enum untuk Role Admin
+enum AdminRole {
+  ADMIN      // Full access - bisa mengelola users, roles, dan semua content
+  EDITOR     // Bisa mengelola content (blog post) tapi tidak bisa mengelola users/roles
+  READ_ONLY  // Hanya bisa melihat dashboard dan content, tidak bisa edit/delete
 }
 
 // Model untuk Admin User
 model Admin {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  password  String   // hashed password
+  id        String     @id @default(uuid())
+  username  String     @unique
+  password  String     // hashed password
   name      String
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  email     String     @unique
+  role      AdminRole  @default(READ_ONLY)
+  lastLogin DateTime?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  blogPosts BlogPost[]
+
+  @@map("Admin")
 }

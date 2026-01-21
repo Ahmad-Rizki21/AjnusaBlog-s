@@ -1,0 +1,5 @@
+-- AlterAdminTable
+ALTER TABLE `Admin` ADD COLUMN `role` ENUM('ADMIN', 'EDITOR', 'READ_ONLY') NOT NULL DEFAULT 'READ_ONLY';
+
+-- AlterAdminTable
+ALTER TABLE `Admin` ADD COLUMN `lastLogin` DATETIME(3) NULL;

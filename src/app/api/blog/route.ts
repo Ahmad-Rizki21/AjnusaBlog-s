@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { AdminRole, Permission, hasPermission } from '@/lib/permissions';
 
 // GET all blog posts
 export async function GET(request: NextRequest) {
@@ -22,9 +23,48 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// Helper to get current admin from request
+async function getCurrentAdmin(request: NextRequest) {
+  const adminId = request.headers.get('x-admin-id');
+
+  if (!adminId) {
+    return null;
+  }
+
+  const admin = await prisma.admin.findUnique({
+    where: { id: adminId },
+    select: {
+      id: true,
+      username: true,
+      name: true,
+      email: true,
+      role: true,
+    },
+  });
+
+  return admin;
+}
+
 // POST create new blog post
 export async function POST(request: NextRequest) {
   try {
+    // Check permission
+    const admin = await getCurrentAdmin(request);
+
+    if (!admin) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Silakan login terlebih dahulu' },
+        { status: 401 }
+      );
+    }
+
+    if (!hasPermission(admin.role, Permission.CREATE_BLOG)) {
+      return NextResponse.json(
+        { error: 'Forbidden - Role Anda tidak memiliki izin untuk membuat artikel' },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const { title, slug, excerpt, content, image, category, author, published } = body;
 
@@ -57,6 +97,7 @@ export async function POST(request: NextRequest) {
         category,
         author,
         published: published ?? true,
+        authorId: admin.id,
       },
     });
 

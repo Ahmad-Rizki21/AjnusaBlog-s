@@ -16,6 +16,7 @@ async function main() {
       password: hashedPassword,
       name: 'Administrator',
       email: 'ahmad@ajnusa.com',
+      role: 'ADMIN',
     },
   });
 

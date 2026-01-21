@@ -33,6 +33,7 @@ services:
       - DATABASE_URL=mysql://ajnusa_user:ajnusa_password@mysql:3306/ajnusa_db
       - NEXTAUTH_URL=http://localhost:3000
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-your-secret-key-change-in-production}
+      - FIX_SLUGS=${FIX_SLUGS:-false}
     depends_on:
       mysql:
         condition: service_healthy

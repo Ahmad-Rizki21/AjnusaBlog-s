@@ -71,7 +71,7 @@ export default function AdminLoginPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-              Username
+              Username atau Email
             </label>
             <input
               id="username"
@@ -79,7 +79,7 @@ export default function AdminLoginPage() {
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition"
-              placeholder="Masukkan username"
+              placeholder="Masukkan username atau email"
               required
             />
           </div>

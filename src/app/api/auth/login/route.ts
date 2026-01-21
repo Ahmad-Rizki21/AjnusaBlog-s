@@ -14,9 +14,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find admin user
-    const admin = await prisma.admin.findUnique({
-      where: { username },
+    // Find admin user (by username or email)
+    const admin = await prisma.admin.findFirst({
+      where: {
+        OR: [
+          { username },
+          { email: username },
+        ],
+      },
     });
 
     if (!admin) {
@@ -35,6 +40,12 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
+
+    // Update last login
+    await prisma.admin.update({
+      where: { id: admin.id },
+      data: { lastLogin: new Date() },
+    });
 
     // Return admin data (without password)
     const { password: _, ...adminData } = admin;
