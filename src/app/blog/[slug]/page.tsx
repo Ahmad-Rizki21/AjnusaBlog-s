@@ -7,7 +7,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BlogCard from '@/components/blog/BlogCard';
 import { COMPANY_INFO } from '@/data/constants';
-import { Calendar, User, ArrowLeft, Share2, Clock, Eye, ChevronRight, Megaphone } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Clock, Eye, ChevronRight, Megaphone } from 'lucide-react';
 
 interface BlogPost {
   id: string;
@@ -38,7 +38,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
 
   useEffect(() => {
     fetchPost();
-  }, [slug]);
+  }, [slug, fetchPost]);
 
   const fetchPost = async () => {
     try {

@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation';
 import { SOLUTIONS } from '@/data/constants';
 import { ArrowLeft, Building2, GraduationCap, Landmark, Ship, Building, Store, CheckCircle, Globe, Shield, Zap } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const categoryIcons = {
   Business: Building2,

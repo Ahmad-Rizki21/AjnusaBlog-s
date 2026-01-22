@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { AdminRole, Permission, hasPermission } from '@/lib/permissions';
+import { Permission, hasPermission } from '@/lib/permissions';
 
 // GET all blog posts
 export async function GET(request: NextRequest) {

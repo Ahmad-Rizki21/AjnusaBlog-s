@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
       } else {
         setError(data.error || 'Login gagal');
       }
-    } catch (err) {
+    } catch {
       setError('Terjadi kesalahan koneksi');
     } finally {
       setLoading(false);

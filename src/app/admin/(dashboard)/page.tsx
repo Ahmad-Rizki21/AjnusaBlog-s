@@ -56,22 +56,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Apakah Anda yakin ingin menghapus artikel ini?')) return;
-
-    try {
-      const response = await fetch(`/api/blog/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        fetchData(); // Refresh list
-      }
-    } catch (error) {
-      console.error('Error deleting post:', error);
-    }
-  };
-
   const handleTogglePopup = async (id: string, currentStatus: boolean) => {
     try {
       const response = await api.put(`/api/admin/popups/${id}`, {

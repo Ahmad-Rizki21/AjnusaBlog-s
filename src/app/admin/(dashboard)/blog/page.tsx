@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Eye, Edit, Trash2, Plus, Search, Calendar, User, FileText as FileTextIcon, Sparkles } from 'lucide-react';
 import { api } from '@/lib/api-fetch';
-import { getCurrentAdmin, Permission, checkCurrentUserPermission } from '@/lib/permissions';
+import { Permission, checkCurrentUserPermission } from '@/lib/permissions';
 
 interface BlogPost {
   id: string;

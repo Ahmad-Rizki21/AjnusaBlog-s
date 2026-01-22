@@ -268,7 +268,7 @@ export default function Services() {
 
         {/* Mobile View: Accordion Layout (Existing) */}
         <div className="lg:hidden space-y-6 max-w-5xl mx-auto">
-          {SERVICES.map((service, index) => {
+          {SERVICES.map((service) => {
             const Icon = iconMap[service.icon as keyof typeof iconMap] || Cable;
             const isExpanded = expandedMobileId === service.id;
 

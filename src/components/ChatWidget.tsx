@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { X, Send, MessageCircle } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { X, Send } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -54,11 +54,12 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [showQuickReplies, setShowQuickReplies] = useState(true);
+  const messageIdCounter = useRef(0);
 
   const handleQuickReply = (reply: QuickReply) => {
     // Add user message
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: `msg-${messageIdCounter.current++}`,
       text: reply.text,
       isUser: true,
       timestamp: new Date()
@@ -70,7 +71,7 @@ export default function ChatWidget() {
     // Add bot response after a short delay
     setTimeout(() => {
       const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: `msg-${messageIdCounter.current++}`,
         text: reply.response,
         isUser: false,
         timestamp: new Date()
@@ -83,7 +84,7 @@ export default function ChatWidget() {
     if (inputMessage.trim()) {
       // Add user message
       const userMessage: Message = {
-        id: Date.now().toString(),
+        id: `msg-${messageIdCounter.current++}`,
         text: inputMessage,
         isUser: true,
         timestamp: new Date()
@@ -95,7 +96,7 @@ export default function ChatWidget() {
       // Add bot response
       setTimeout(() => {
         const botMessage: Message = {
-          id: (Date.now() + 1).toString(),
+          id: `msg-${messageIdCounter.current++}`,
           text: 'Terima kasih atas pertanyaan Anda! Tim kami akan segera menghubungi Anda. Untuk respons lebih cepat, silakan hubungi kami via WhatsApp di +62 813 1547 4123 atau email ke sales@ajnusa.com',
           isUser: false,
           timestamp: new Date()

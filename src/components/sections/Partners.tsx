@@ -2,7 +2,6 @@
 
 import { Building2 } from 'lucide-react';
 import { PARTNERS } from '@/data/constants';
-import Image from 'next/image';
 
 export default function Partners() {
   return (

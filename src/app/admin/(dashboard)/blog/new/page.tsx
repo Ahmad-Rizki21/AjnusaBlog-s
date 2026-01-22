@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Save, FileText, Sparkles, Upload, X } from 'lucide-react';
+import { ArrowLeft, Save, FileText, Sparkles } from 'lucide-react';
 
 const categories = ['Teknologi', 'Business', 'Industri', 'Case Study', 'Tips'];
 
@@ -111,7 +111,7 @@ export default function NewBlogPostPage() {
       } else {
         setError(data.error || 'Gagal membuat artikel');
       }
-    } catch (err) {
+    } catch {
       setError('Terjadi kesalahan koneksi');
     } finally {
       setLoading(false);

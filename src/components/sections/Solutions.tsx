@@ -2,7 +2,6 @@
 
 import { ArrowRight, Building2, GraduationCap, Landmark, Ship, Building, Store } from 'lucide-react';
 import { SOLUTIONS } from '@/data/constants';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const categoryIcons = {
@@ -36,7 +35,7 @@ export default function Solutions() {
 
         {/* Solutions Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {SOLUTIONS.map((solution, index) => {
+          {SOLUTIONS.map((solution) => {
             const Icon = categoryIcons[solution.category as keyof typeof categoryIcons] || Building2;
 
             return (

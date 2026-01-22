@@ -36,19 +36,15 @@ export default function AdminLayout({
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
     const session = localStorage.getItem('adminSession');
     if (session) {
       setAdmin(JSON.parse(session));
     } else {
       router.push('/admin/login');
     }
-  }, [router, isMounted]);
+  }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem('adminSession');

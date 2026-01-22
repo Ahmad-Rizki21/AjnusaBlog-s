@@ -39,7 +39,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
 
   useEffect(() => {
     fetchPost();
-  }, [id]);
+  }, [id, fetchPost]);
 
   const fetchPost = async () => {
     try {
@@ -61,20 +61,11 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
       } else {
         setError(data.error || 'Gagal mengambil artikel');
       }
-    } catch (err) {
+    } catch {
       setError('Terjadi kesalahan koneksi');
     } finally {
       setLoading(false);
     }
-  };
-
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +97,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
       } else {
         setError(data.error || 'Gagal mengupdate artikel');
       }
-    } catch (err) {
+    } catch {
       setError('Terjadi kesalahan koneksi');
     } finally {
       setSaving(false);

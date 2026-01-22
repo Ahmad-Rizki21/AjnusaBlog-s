@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 // GET all active popups for public
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const popups = await prisma.popup.findMany({
       where: {
