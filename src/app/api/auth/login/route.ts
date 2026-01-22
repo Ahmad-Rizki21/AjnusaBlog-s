@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Return admin data (without password)
-    const { password: _, ...adminData } = admin;
+    const { password, ...adminData } = admin;
 
     return NextResponse.json({
       message: 'Login berhasil',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use, useCallback } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
@@ -36,7 +36,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   const [loading, setLoading] = useState(true);
   const [notFoundState, setNotFoundState] = useState(false);
 
-  const fetchPost = async () => {
+  const fetchPost = useCallback(async () => {
     try {
       // Fetch all posts and find by slug
       const response = await fetch('/api/blog');
@@ -65,7 +65,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug]);
 
   useEffect(() => {
     fetchPost();

@@ -10,16 +10,12 @@ import { useCallback, useEffect } from 'react';
 import {
   Bold,
   Italic,
-  Underline,
   Strikethrough,
   List,
   ListOrdered,
   Heading1,
   Heading2,
   Heading3,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
   Link as LinkIcon,
   Image as ImageIcon,
   Undo,
@@ -32,6 +28,31 @@ interface EditorProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+}
+
+// ToolbarButton component defined outside of render
+interface ToolbarButtonProps {
+  onClick: () => void;
+  active?: boolean;
+  children: React.ReactNode;
+  title: string;
+}
+
+function ToolbarButton({ onClick, active, children, title }: ToolbarButtonProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      className={`p-2 rounded-lg transition-all ${
+        active
+          ? 'bg-red-100 text-red-700'
+          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+      }`}
+    >
+      {children}
+    </button>
+  );
 }
 
 export default function Editor({ value, onChange, placeholder }: EditorProps) {
@@ -96,31 +117,6 @@ export default function Editor({ value, onChange, placeholder }: EditorProps) {
       </div>
     );
   }
-
-  const ToolbarButton = ({
-    onClick,
-    active,
-    children,
-    title,
-  }: {
-    onClick: () => void;
-    active?: boolean;
-    children: React.ReactNode;
-    title: string;
-  }) => (
-    <button
-      type="button"
-      onClick={onClick}
-      title={title}
-      className={`p-2 rounded-lg transition-all ${
-        active
-          ? 'bg-red-100 text-red-700'
-          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-      }`}
-    >
-      {children}
-    </button>
-  );
 
   return (
     <div className="border-2 border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">

@@ -5,7 +5,6 @@ import { Popup } from "@/components/Popup";
 import CookieConsent from "@/components/CookieConsent";
 import ChatWidget from "@/components/ChatWidget";
 import JsonLd from "@/components/JsonLd";
-import { generateMetadata as generateOpenGraphMetadata } from "@/lib/metadata";
 import { generateOrganizationSchema, generateWebSiteSchema } from "@/lib/structured-data";
 import { COMPANY_INFO } from "@/data/constants";
 

@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 // GET all active popups for public
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     const popups = await prisma.popup.findMany({
       where: {

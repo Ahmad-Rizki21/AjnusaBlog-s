@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { COMPANY_INFO, CONTACT_INFO } from '@/data/constants';
+import { COMPANY_INFO } from '@/data/constants';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ajnusa.com';
 const DEFAULT_OG_IMAGE = '/images/og-image.jpg';
