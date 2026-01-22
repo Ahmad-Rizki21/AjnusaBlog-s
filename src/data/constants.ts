@@ -226,7 +226,7 @@ export const SOLUTIONS: Solution[] = [
     category: 'Government',
   },
   {
-    id: 'maritim&shipping',
+    id: 'maritim-shipping',
     title: 'Maritim & Shipping',
     description: 'Solusi internet khusus untuk perusahaan maritim dan shipping dengan coverage seluruh Indonesia.',
     image: '/images/solutions/pexels-dibert-1117210.jpg',
