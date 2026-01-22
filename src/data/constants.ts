@@ -153,10 +153,10 @@ export const SERVICES: Service[] = [
   {
     id: 'jakinet',
     title: 'Artacom - Jakinet',
-    shortDescription: 'ISP broadband berbasis satelit untuk warga rusun di DKI Jakarta.',
-    fullDescription: 'Jakinet adalah layanan Internet Service Provider (ISP) dan broadband berbasis satelit yang dirancang khusus untuk memenuhi kebutuhan warga rumah susun (rusun) di wilayah DKI Jakarta. Dengan memanfaatkan teknologi VSAT mutakhir, Jakinet menyediakan konektivitas internet cepat dan andal.',
+    shortDescription: 'ISP broadband berbasis Fiber Optic untuk warga rusun di DKI Jakarta.',
+    fullDescription: 'Jakinet adalah layanan Internet Service Provider (ISP) dan broadband berbasis Fiber Optic yang dirancang khusus untuk memenuhi kebutuhan warga rumah susun (rusun) di wilayah DKI Jakarta. Dengan memanfaatkan teknologi FO mutakhir, Jakinet menyediakan konektivitas internet cepat dan andal.',
     icon: 'wifi',
-    technology: 'VSAT Broadband',
+    technology: 'Fiber Optic',
     specifications: [
       'Outroute (Download): Hingga 50 Mbps (shared)',
       'Inroute (Upload): Hingga 10 Mbps (shared)',
@@ -173,18 +173,17 @@ export const SERVICES: Service[] = [
     benefits: [
       'Akses internet terjangkau untuk komunitas rusun',
       'Mendukung digitalisasi pendidikan dan pekerjaan dari rumah',
-      'Jangkauan luas tanpa ketergantungan pada kabel fisik',
     ],
   },
   {
     id: 'jelantik',
     title: 'Artacom - Jelantik',
-    shortDescription: 'Internet broadband berbasis satelit untuk perumahan dan rusun.',
-    fullDescription: 'Jelantik adalah layanan internet broadband berbasis satelit yang dirancang untuk memberikan konektivitas unggul kepada warga perumahan dan rumah susun (rusun) di berbagai wilayah. Dengan teknologi satelit canggih, Jelantik menawarkan solusi internet yang andal untuk mendukung gaya hidup modern.',
+    shortDescription: 'Internet broadband berbasis Fiber Optic untuk perumahan dan rusun.',
+    fullDescription: 'Jelantik adalah layanan internet broadband berbasis Fiber Optic yang dirancang untuk memberikan konektivitas unggul kepada warga perumahan dan rumah susun (rusun) di berbagai wilayah. Dengan teknologi Fiber Optic canggih, Jelantik menawarkan solusi internet yang andal untuk mendukung gaya hidup modern.',
     icon: 'radio',
-    technology: 'VSAT Broadband dengan ACM',
+    technology: 'Fiber Optic',
     specifications: [
-      'Outroute (Download): Hingga 70 Mbps (shared)',
+      'Outroute (Download): Hingga 50 Mbps (shared)',
       'Inroute (Upload): Hingga 15 Mbps (shared)',
       'Interface: Ethernet',
       'Coverage: Perumahan dan rusun di seluruh Indonesia',
