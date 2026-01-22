@@ -36,21 +36,17 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   const [loading, setLoading] = useState(true);
   const [notFoundState, setNotFoundState] = useState(false);
 
-  useEffect(() => {
-    fetchPost();
-  }, [slug, fetchPost]);
-
   const fetchPost = async () => {
     try {
       // Fetch all posts and find by slug
       const response = await fetch('/api/blog');
       const allPosts = await response.json();
-      
+
       console.log('Looking for slug:', slug);
       console.log('Available posts:', allPosts.map((p: BlogPost) => ({ id: p.id, slug: p.slug, title: p.title })));
-      
+
       const foundPost = allPosts.find((p: BlogPost) => p.slug === slug);
-      
+
       console.log('Found post:', foundPost);
 
       if (foundPost) {
@@ -70,6 +66,10 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchPost();
+  }, [slug, fetchPost]);
 
   if (loading) {
     return (

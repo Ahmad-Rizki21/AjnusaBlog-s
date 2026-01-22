@@ -37,10 +37,6 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
     published: true,
   });
 
-  useEffect(() => {
-    fetchPost();
-  }, [id, fetchPost]);
-
   const fetchPost = async () => {
     try {
       const response = await fetch(`/api/blog/${id}`);
@@ -67,6 +63,10 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchPost();
+  }, [id, fetchPost]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
