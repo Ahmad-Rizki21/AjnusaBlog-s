@@ -64,9 +64,9 @@ async function getBlogPosts() {
 
     const posts = await response.json();
 
-    return posts.map((post: any) => ({
+    return posts.map((post: { slug: string; updatedAt?: string; createdAt?: string }) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
-      lastModified: new Date(post.updatedAt || post.createdAt),
+      lastModified: new Date(post.updatedAt || post.createdAt || Date.now()),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }));
