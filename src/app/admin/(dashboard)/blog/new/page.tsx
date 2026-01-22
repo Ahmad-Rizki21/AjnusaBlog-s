@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Save, FileText, Sparkles } from 'lucide-react';
 import Editor from '@/components/Editor';
+import { api } from '@/lib/api-fetch';
 
 const categories = ['Teknologi', 'Business', 'Industri', 'Case Study', 'Tips'];
 
@@ -97,14 +98,7 @@ export default function NewBlogPostPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/blog', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
+      const response = await api.post('/api/blog', formData);
       const data = await response.json();
 
       if (response.ok) {

@@ -4,6 +4,7 @@ import { useState, useEffect, use, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Save } from 'lucide-react';
+import { api } from '@/lib/api-fetch';
 
 const categories = ['Teknologi', 'Business', 'Industri', 'Case Study', 'Tips'];
 
@@ -82,14 +83,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
     setSaving(true);
 
     try {
-      const response = await fetch(`/api/blog/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
+      const response = await api.put(`/api/blog/${id}`, formData);
       const data = await response.json();
 
       if (response.ok) {
