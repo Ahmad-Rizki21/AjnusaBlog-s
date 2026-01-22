@@ -48,7 +48,8 @@ export async function POST(request: NextRequest) {
     });
 
     // Return admin data (without password)
-    const { password, ...adminData } = admin;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _password, ...adminData } = admin;
 
     return NextResponse.json({
       message: 'Login berhasil',
