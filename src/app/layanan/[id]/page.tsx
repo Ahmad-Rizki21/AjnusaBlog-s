@@ -1,6 +1,10 @@
 import { notFound } from 'next/navigation';
 import { SERVICES } from '@/data/constants';
 import { generateServiceMetadata } from '@/lib/metadata';
+import { generateServiceSchema, generateBreadcrumbSchema } from '@/lib/structured-data';
+import JsonLd from '@/components/JsonLd';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ajnusa.com';
 import { 
   ArrowLeft, 
   Cable, 
@@ -66,8 +70,26 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
   const Icon = iconMap[service.icon as keyof typeof iconMap] || Cable;
 
+  // Generate structured data
+  const serviceSchema = generateServiceSchema({
+    name: service.title,
+    description: service.shortDescription,
+    id: service.id,
+    type: 'layanan',
+    category: service.technology,
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Layanan', url: `${SITE_URL}/#services` },
+    { name: service.title, url: `${SITE_URL}/layanan/${service.id}` },
+  ]);
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div>
+      <JsonLd id="service" {...serviceSchema} />
+      <JsonLd id="breadcrumb" {...breadcrumbSchema} />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
       <div className="relative bg-linear-to-br from-red-600 via-red-700 to-red-800 py-20">
         <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10"></div>
@@ -267,6 +289,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

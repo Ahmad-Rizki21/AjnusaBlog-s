@@ -1,6 +1,10 @@
 import { notFound } from 'next/navigation';
 import { SOLUTIONS } from '@/data/constants';
 import { generateServiceMetadata } from '@/lib/metadata';
+import { generateServiceSchema, generateBreadcrumbSchema } from '@/lib/structured-data';
+import JsonLd from '@/components/JsonLd';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ajnusa.com';
 import { ArrowLeft, Building2, GraduationCap, Landmark, Ship, Building, Store, CheckCircle, Globe, Shield, Zap } from 'lucide-react';
 import Link from 'next/link';
 
@@ -49,8 +53,27 @@ export default async function SolutionDetailPage({ params }: { params: Promise<{
 
   const Icon = categoryIcons[solution.category as keyof typeof categoryIcons] || Building2;
 
+  // Generate structured data
+  const serviceSchema = generateServiceSchema({
+    name: solution.title,
+    description: solution.description,
+    id: solution.id,
+    type: 'solusi',
+    category: solution.category,
+    image: solution.image,
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Solusi', url: `${SITE_URL}/#solutions` },
+    { name: solution.title, url: `${SITE_URL}/solusi/${solution.id}` },
+  ]);
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div>
+      <JsonLd id="solution" {...serviceSchema} />
+      <JsonLd id="breadcrumb" {...breadcrumbSchema} />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
       <div className="relative h-[400px] overflow-hidden">
         <img
@@ -239,6 +262,7 @@ export default async function SolutionDetailPage({ params }: { params: Promise<{
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
