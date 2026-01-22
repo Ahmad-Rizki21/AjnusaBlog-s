@@ -274,8 +274,6 @@ export const CONTACT_INFO: ContactInfo = {
   social: {
     facebook: 'https://www.facebook.com/p/PT-Artacomindo-Jejaring-Nusa-100054324456980',
     instagram: 'https://www.instagram.com/artacomindojejaring',
-    linkedin: 'https://linkedin.com/company/ajnusa',
-    youtube: 'https://youtube.com/@ajnusa',
   },
 };
 

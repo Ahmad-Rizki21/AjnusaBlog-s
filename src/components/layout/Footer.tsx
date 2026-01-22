@@ -4,8 +4,6 @@ import Link from 'next/link';
 import {
   Facebook,
   Instagram,
-  Linkedin,
-  Youtube,
   Mail,
   Phone,
   MapPin,
@@ -53,28 +51,6 @@ export default function Footer() {
                   aria-label="Instagram"
                 >
                   <Instagram size={18} />
-                </Link>
-              )}
-              {CONTACT_INFO.social?.linkedin && (
-                <Link
-                  href={CONTACT_INFO.social.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-800 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-colors"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin size={18} />
-                </Link>
-              )}
-              {CONTACT_INFO.social?.youtube && (
-                <Link
-                  href={CONTACT_INFO.social.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-800 hover:bg-red-600 rounded-lg flex items-center justify-center transition-colors"
-                  aria-label="YouTube"
-                >
-                  <Youtube size={18} />
                 </Link>
               )}
             </div>
