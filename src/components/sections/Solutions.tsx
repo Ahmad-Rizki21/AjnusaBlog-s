@@ -78,7 +78,7 @@ export default function Solutions() {
 
                   {/* Link */}
                   <Link
-                    href="#contact"
+                    href={`/solusi/${solution.id}`}
                     className="inline-flex items-center space-x-2 text-red-700 dark:text-red-400 font-medium text-sm group-hover:space-x-3 transition-all"
                   >
                     <span>Pelajari Lebih Lanjut</span>

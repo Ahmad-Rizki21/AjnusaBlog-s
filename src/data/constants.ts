@@ -261,7 +261,7 @@ export const PARTNERS: Partner[] = [
 ];
 
 export const CONTACT_INFO: ContactInfo = {
-  address: 'Pekantoran Graha Prima Bintara No 8, Jl Terusan I Gusti Ngurah Rai, 17134',
+  address: 'Perkantoran Graha Prima Bintara No 8, Jl Terusan I Gusti Ngurah Rai, 17134',
   phones: [
     '+62 813 1547 4123',
     '+62 8495 2514',

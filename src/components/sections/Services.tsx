@@ -331,7 +331,7 @@ export default function Services() {
                         )}
                          <div className="pt-4">
                              <Link
-                             href="#contact"
+                             href={`/layanan/${service.id}`}
                              className="w-full inline-flex items-center justify-center space-x-2 px-6 py-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 font-semibold rounded-xl hover:bg-red-200 transition-colors"
                            >
                               <span>Pelajari Lebih Lanjut</span>

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Popup } from "@/components/Popup";
+import CookieConsent from "@/components/CookieConsent";
+import ChatWidget from "@/components/ChatWidget";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,6 +26,8 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         {children}
         <Popup />
+        <CookieConsent />
+        <ChatWidget />
       </body>
     </html>
   );
