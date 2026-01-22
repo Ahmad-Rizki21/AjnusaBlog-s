@@ -28,6 +28,12 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@tiptap/react": "^2.12.2",
+    "@tiptap/starter-kit": "^2.12.2",
+    "@tiptap/extension-link": "^2.12.2",
+    "@tiptap/extension-image": "^2.12.2",
+    "@tiptap/extension-text-style": "^2.12.2",
+    "@tiptap/extension-color": "^2.12.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Save, FileText, Sparkles } from 'lucide-react';
+import Editor from '@/components/Editor';
 
 const categories = ['Teknologi', 'Business', 'Industri', 'Case Study', 'Tips'];
 
@@ -361,18 +362,13 @@ export default function NewBlogPostPage() {
             <label htmlFor="content" className="block text-sm font-bold text-gray-900 uppercase tracking-wide">
               Konten Artikel *
             </label>
-            <textarea
-              id="content"
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              rows={24}
-              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none resize-none font-mono text-sm leading-relaxed transition-all"
-              placeholder="Tulis konten artikel di sini...&#10;&#10;Gunakan enter untuk baris baru.&#10;Format plain text tanpa Markdown."
-              required
-            />
-            <p className="text-sm text-gray-500">
-              {formData.content.split('\n').length} baris • {formData.content.length} karakter
-            </p>
+            <div className="prose-editor">
+              <Editor
+                value={formData.content}
+                onChange={(content) => setFormData({ ...formData, content })}
+                placeholder="Tulis konten artikel di sini..."
+              />
+            </div>
           </div>
         </div>
 
