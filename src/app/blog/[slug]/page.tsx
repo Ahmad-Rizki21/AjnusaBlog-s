@@ -230,9 +230,10 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                       <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
                         {post.excerpt}
                       </p>
-                      <div className="whitespace-pre-line text-gray-700 dark:text-gray-300 leading-relaxed text-base">
-                        {post.content}
-                      </div>
+                      <div 
+                        className="text-gray-700 dark:text-gray-300 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: post.content }}
+                      />
                     </div>
 
                     {/* Tags */}
