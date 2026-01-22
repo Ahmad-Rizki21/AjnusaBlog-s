@@ -21,6 +21,11 @@ export const metadata: Metadata = {
   description: "Perusahaan penyedia layanan internet fiber optik, VSAT, SD-WAN terbaik di Indonesia. Juga melayani pembuatan website dan aplikasi mobile.",
   keywords: ["internet service provider", "fiber optic", "VSAT", "SD-WAN", "web development", "IT solution"],
   metadataBase: new URL(SITE_URL),
+  icons: {
+    icon: '/logo-ajnusa.png',
+    shortcut: '/logo-ajnusa.png',
+    apple: '/logo-ajnusa.png',
+  },
   openGraph: {
     title: "AJNUSA - Internet Service Provider & IT Solution Provider",
     description: "Perusahaan penyedia layanan internet fiber optik, VSAT, SD-WAN terbaik di Indonesia. Juga melayani pembuatan website dan aplikasi mobile.",
