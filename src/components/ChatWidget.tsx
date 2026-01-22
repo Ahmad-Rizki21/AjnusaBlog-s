@@ -123,7 +123,7 @@ export default function ChatWidget() {
     <>
       {/* Chat Box */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 md:right-6 w-[90vw] max-w-[420px] bg-white rounded-3xl shadow-2xl z-9999 animate-slideUp overflow-hidden flex flex-col max-h-[600px]">
+        <div className="fixed bottom-24 right-4 md:right-6 w-[90vw] max-w-[420px] bg-white rounded-3xl shadow-2xl z-9999 animate-slide-up overflow-hidden flex flex-col max-h-[600px]">
           {/* Header */}
           <div className="bg-linear-to-r from-red-600 to-red-700 p-4 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">
@@ -264,24 +264,6 @@ export default function ChatWidget() {
           </>
         )}
       </button>
-
-      {/* Global Styles for Animations */}
-      <style jsx global>{`
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-slideUp {
-          animation: slideUp 0.3s ease-out;
-        }
-      `}</style>
     </>
   );
 }
