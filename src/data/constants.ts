@@ -272,8 +272,8 @@ export const CONTACT_INFO: ContactInfo = {
     technicalSupport: 'Dukungan Teknis : 24 Jam',
   },
   social: {
-    facebook: 'https://facebook.com/ajnusa',
-    instagram: 'https://instagram.com/artacomindojejaringnusa',
+    facebook: 'https://www.facebook.com/p/PT-Artacomindo-Jejaring-Nusa-100054324456980',
+    instagram: 'https://www.instagram.com/artacomindojejaring',
     linkedin: 'https://linkedin.com/company/ajnusa',
     youtube: 'https://youtube.com/@ajnusa',
   },

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { SOLUTIONS } from '@/data/constants';
+import { generateServiceMetadata } from '@/lib/metadata';
 import { ArrowLeft, Building2, GraduationCap, Landmark, Ship, Building, Store, CheckCircle, Globe, Shield, Zap } from 'lucide-react';
 import Link from 'next/link';
 
@@ -21,17 +22,21 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const solution = SOLUTIONS.find((s) => s.id === id);
-  
+
   if (!solution) {
     return {
       title: 'Solusi Tidak Ditemukan - AJNUSA',
     };
   }
 
-  return {
-    title: `${solution.title} - AJNUSA`,
+  return generateServiceMetadata({
+    title: solution.title,
     description: solution.description,
-  };
+    id: solution.id,
+    type: 'solusi',
+    category: solution.category,
+    image: solution.image,
+  });
 }
 
 export default async function SolutionDetailPage({ params }: { params: Promise<{ id: string }> }) {

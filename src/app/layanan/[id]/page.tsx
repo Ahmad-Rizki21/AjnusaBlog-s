@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { SERVICES } from '@/data/constants';
+import { generateServiceMetadata } from '@/lib/metadata';
 import { 
   ArrowLeft, 
   Cable, 
@@ -39,17 +40,20 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const service = SERVICES.find((s) => s.id === id);
-  
+
   if (!service) {
     return {
       title: 'Layanan Tidak Ditemukan - AJNUSA',
     };
   }
 
-  return {
-    title: `${service.title} - AJNUSA`,
+  return generateServiceMetadata({
+    title: service.title,
     description: service.shortDescription,
-  };
+    id: service.id,
+    type: 'layanan',
+    category: service.technology,
+  });
 }
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
