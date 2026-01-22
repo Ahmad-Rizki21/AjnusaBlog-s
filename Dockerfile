@@ -42,9 +42,13 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NPM_CONFIG_CACHE=/tmp/npm-cache
 
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN adduser --system --uid 1001 nextjs --home /home/nextjs
+
+# Create npm cache directory
+RUN mkdir -p /tmp/npm-cache && chown -R nextjs:nodejs /tmp/npm-cache
 
 # Copy standalone files (this includes server.js, node_modules, package.json)
 COPY --from=builder /app/.next/standalone ./
