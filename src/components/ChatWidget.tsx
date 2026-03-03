@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { X, Send } from 'lucide-react';
 
 interface Message {
@@ -50,11 +51,14 @@ const QUICK_REPLIES: QuickReply[] = [
 ];
 
 export default function ChatWidget() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const messageIdCounter = useRef(0);
+
+
 
   const handleQuickReply = (reply: QuickReply) => {
     // Add user message
@@ -125,7 +129,7 @@ export default function ChatWidget() {
       {isOpen && (
         <div className="fixed bottom-24 right-4 md:right-6 w-[90vw] max-w-[420px] bg-white rounded-3xl shadow-2xl z-9999 animate-slide-up overflow-hidden flex flex-col max-h-[600px]">
           {/* Header */}
-          <div className="bg-linear-to-r from-red-600 to-red-700 p-4 flex items-center justify-between flex-shrink-0">
+          <div className="bg-linear-to-r from-red-600 to-red-700 p-4 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-red-600" viewBox="0 0 24 24" fill="currentColor">
@@ -225,7 +229,7 @@ export default function ChatWidget() {
           </div>
 
           {/* Input Field */}
-          <div className="p-4 bg-white border-t border-gray-200 flex-shrink-0">
+          <div className="p-4 bg-white border-t border-gray-200 shrink-0">
             <div className="relative">
               <input
                 type="text"

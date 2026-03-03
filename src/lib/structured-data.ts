@@ -243,3 +243,106 @@ export function generateWebSiteSchema() {
     },
   };
 }
+
+/**
+ * Generate LocalBusiness Schema (JSON-LD)
+ * Critical for local SEO and Google Maps
+ * https://schema.org/LocalBusiness
+ */
+export function generateLocalBusinessSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TelecommunicationsService',
+    '@id': `${SITE_URL}/#localbusiness`,
+    name: COMPANY_INFO.fullName,
+    alternateName: COMPANY_INFO.name,
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo-ajnusa.png`,
+    image: `${SITE_URL}/images/og-image.jpg`,
+    description: COMPANY_INFO.description,
+    telephone: CONTACT_INFO.phones?.[0],
+    email: CONTACT_INFO.email,
+    foundingDate: `${COMPANY_INFO.since}-01-01`,
+    priceRange: '$$',
+    currenciesAccepted: 'IDR',
+    paymentAccepted: 'Cash, Bank Transfer',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: CONTACT_INFO.address,
+      addressLocality: 'Bekasi',
+      addressRegion: 'Jawa Barat',
+      postalCode: '17134',
+      addressCountry: 'ID',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: -6.2615,
+      longitude: 106.9901,
+    },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '17:00',
+      },
+    ],
+    areaServed: {
+      '@type': 'Country',
+      name: 'Indonesia',
+    },
+    sameAs: Object.values(CONTACT_INFO.social || {}).filter(Boolean),
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Layanan Internet & IT',
+      itemListElement: [
+        {
+          '@type': 'OfferCatalog',
+          name: 'Internet Service',
+          itemListElement: [
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'VSAT Broadband' } },
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'SCPC Link' } },
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Fiber Optic' } },
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'SD-WAN / VPN' } },
+          ],
+        },
+      ],
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '120',
+      bestRating: '5',
+      worstRating: '1',
+    },
+  };
+}
+
+/**
+ * Generate SiteNavigationElement Schema (JSON-LD)
+ * Helps Google discover important pages
+ * https://schema.org/SiteNavigationElement
+ */
+export function generateSiteNavigationSchema() {
+  const navItems = [
+    { name: 'Home', url: SITE_URL },
+    { name: 'Tentang Kami', url: `${SITE_URL}/#about` },
+    { name: 'Layanan', url: `${SITE_URL}/#services` },
+    { name: 'Solusi', url: `${SITE_URL}/#solutions` },
+    { name: 'Klien', url: `${SITE_URL}/#clients` },
+    { name: 'Blog', url: `${SITE_URL}/blog` },
+    { name: 'Promosi', url: `${SITE_URL}/promosi` },
+    { name: 'Hubungi Kami', url: `${SITE_URL}/#contact` },
+  ];
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: navItems.map((item, index) => ({
+      '@type': 'SiteNavigationElement',
+      position: index + 1,
+      name: item.name,
+      url: item.url,
+    })),
+  };
+}

@@ -11,11 +11,22 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/admin/',
           '/api/',
+
+          '/_next/',
           '/kebijakan-cookie',
         ],
       },
       {
         userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/admin/', '/api/'],
+      },
+      {
+        userAgent: 'Googlebot-Image',
+        allow: '/images/',
+      },
+      {
+        userAgent: 'Bingbot',
         allow: '/',
         disallow: ['/admin/', '/api/'],
       },
